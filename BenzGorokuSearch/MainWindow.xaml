@@ -1,0 +1,108 @@
+﻿<Window x:Class="BenzGorokuSearch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BenzGorokuSearch"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="ベンツ君語録検索" Height="{Binding WindowHeight,Mode=TwoWay,FallbackValue=400}" Width="{Binding WindowWidth,Mode=TwoWay,FallbackValue=800}" WindowState="{Binding WindowState,Mode=TwoWay}" MinWidth="800" MinHeight="400" Left="{Binding WindowLocationX,Mode=TwoWay,FallbackValue=100}" Top="{Binding WindowLocationY,Mode=TwoWay,FallbackValue=100}" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown">
+    <Window.Resources>
+        <ContextMenu x:Key="RichTextBoxMenu">
+            <MenuItem Header="選択部分をコピー" Click="CopySelectedText"/>
+            <MenuItem Header="全文をコピー" Click="CopyAllText"/>
+            <MenuItem Header="レスのURLをコピー" Click="CopyOriginalUrl"/>
+            <MenuItem Header="ID別のURLをコピー" Click="CopyIDUrl"/>
+            <MenuItem Header="スレッドのURLをコピー" Click="CopyThreadUrl"/>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid>
+        <ListBox VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Margin="0,46,0,0" FontFamily="MS PGothic" Background="#FFEFEFEF" ItemsSource="{Binding SearchResult,NotifyOnTargetUpdated=True}" TargetUpdated="ListBox_TargetUpdated" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HotTrackBrushKey}" Color="Transparent"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrushKey}" Color="Transparent"/>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <RichTextBox AutoWordSelection="False" IsDocumentEnabled="True" IsReadOnly="True" IsReadOnlyCaretVisible="False" FontFamily="MS PGothic" FontSize="12pt" TextOptions.TextFormattingMode="Display" Background="Transparent" BorderThickness="0" Width="{Binding ActualWidth,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VirtualizingStackPanel},Mode=OneWay}" ContextMenu="{StaticResource RichTextBoxMenu}" ContextMenuOpening="RichTextBox_ContextMenuOpening">
+                        <FlowDocument>
+                            <Paragraph Margin="0" TextOptions.TextRenderingMode="Aliased">
+                                <Hyperlink Foreground="Black" TextDecorations="{x:Null}" NavigateUri="{Binding ResNumberLink,Mode=OneWay}" MouseEnter="Hyperlink_MouseEnter" MouseLeave="Hyperlink_MouseLeave" RequestNavigate="Hyperlink_RequestNavigate">
+                                    <Run Text="{Binding ResNumberString,Mode=OneWay}"/>
+                                </Hyperlink>
+                                <Run Text="："/><Run Text="{Binding Name,Mode=OneWay}" Foreground="#FF228811" FontWeight="Bold"/>
+                                <Run Text="{Binding Date,Mode=OneWay,StringFormat=：yyyy/MM/dd HH:mm:ss}"/>
+                                <Hyperlink Foreground="Black" TextDecorations="{x:Null}" NavigateUri="{Binding IDLink,Mode=OneWay}" MouseEnter="Hyperlink_MouseEnter" MouseLeave="Hyperlink_MouseLeave" RequestNavigate="Hyperlink_RequestNavigate">
+                                    <Run Text="{Binding ID,Mode=OneWay,StringFormat=ID:{0}}"/>
+                                </Hyperlink>
+                                <Hyperlink Foreground="Black" TextDecorations="{x:Null}" RequestNavigate="AddPersonCondition" NavigateUri=" ">
+                                    <InlineUIContainer BaselineAlignment="Center">
+                                        <Border BorderBrush="#CCC" Background="#CCC" CornerRadius="3" BorderThickness="1" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                                            <TextBlock Text="{Binding Tag,Mode=OneWay}" Padding="3"/>
+                                        </Border>
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Paragraph>
+                            <Paragraph Margin="30pt,0,0,0" TextOptions.TextRenderingMode="Aliased">
+                                <Run Text="{Binding Text,Mode=OneWay}"/>
+                            </Paragraph>
+                            <Paragraph Margin="0"/>
+                        </FlowDocument>
+                    </RichTextBox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Content="検索ワード" HorizontalAlignment="Left" Margin="0,-2,0,0" VerticalAlignment="Top" Height="28" Width="70"/>
+        <TextBox Height="23" Margin="70,0,75,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding SearchWord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+        <Button Content="検索" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Height="23" Command="{Binding SearchCommand}"/>
+        <Expander VerticalAlignment="Top" Margin="0,23,0,0">
+            <Expander.Header>
+                <TextBlock>
+                    <Run>検索条件</Run>
+                    <Run Text="{Binding StatusText,Mode=OneWay}"/>
+                    <Run>
+                        <Run.Text>
+                            <Binding Path="SearchResult.Length" Mode="OneWay">
+                                <Binding.StringFormat>{0}件のヒット</Binding.StringFormat>
+                            </Binding>
+                        </Run.Text>
+                    </Run>
+                </TextBlock>
+            </Expander.Header>
+            <Expander.Content>
+                <Grid Background="#FFFFFFFF" Height="200">
+                    <CheckBox Content="指定した日時の中から検索する" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding SearchFromSelectedDate,Mode=TwoWay}"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" SelectedDate="{Binding StartDate,Mode=TwoWay}" DisplayDateEnd="{Binding EndDate,Mode=OneWay}" Width="120"/>
+                    <Label Content="から" HorizontalAlignment="Left" Margin="130,32,0,0" VerticalAlignment="Top" Width="34" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="164,33,0,0" VerticalAlignment="Top" SelectedDate="{Binding EndDate,Mode=TwoWay}" DisplayDateStart="{Binding StartDate,Mode=OneWay}" Width="120"/>
+                    <CheckBox Content="指定したPartから検索する" HorizontalAlignment="Left" Margin="289,10,0,0" VerticalAlignment="Top" IsChecked="{Binding SearchFromSelectedParts,Mode=TwoWay}"/>
+                    <ListView x:Name="partListView" HorizontalAlignment="Left" Margin="289,33,0,10" Width="100" ItemsSource="{Binding PartsList}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay}" Padding="3,0,0,0" VerticalAlignment="Center" Click="PartList_CheckedChanged"/>
+                                    <TextBlock Text="{Binding PartNumberString}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Content="すべて選択" HorizontalAlignment="Left" Margin="394,33,0,0" VerticalAlignment="Top" Width="90" Command="{Binding SelectAllPartsCommand}"/>
+                    <Button Content="すべて解除" HorizontalAlignment="Left" Margin="394,62,0,0" VerticalAlignment="Top" Width="90" Command="{Binding UnselectAllPartsCommand}"/>
+                    <CheckBox Content="指定した人物の発言から検索する" HorizontalAlignment="Left" Margin="489,10,0,0" VerticalAlignment="Top" IsChecked="{Binding SearchFromSelectedPeople,Mode=TwoWay}"/>
+                    <ListView x:Name="peopleListView" HorizontalAlignment="Left" Margin="489,33,0,10" Width="196" ItemsSource="{Binding PeopleList}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay}" Padding="3,0,0,0" VerticalAlignment="Center" Click="PeopleList_CheckedChanged"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Content="すべて選択" HorizontalAlignment="Left" Margin="690,33,0,0" VerticalAlignment="Top" Width="90" Command="{Binding SelectAllPeopleCommand}"/>
+                    <Button Content="すべて解除" HorizontalAlignment="Left" Margin="690,62,0,0" VerticalAlignment="Top" Width="90" Command="{Binding UnselectAllPeopleCommand}"/>
+                    <TextBlock Text="検索早見表&#xD;&#xD;単語をスペースで区切って入力 → 全ての単語が含まれるレスを検索&#xD;*または＊または○ → 任意の1文字に一致&#xD;例: U*Eと検索するとUAE, UOE, U○E, U@Eなどに一致する" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="10,64,0,10" Width="274"/>
+                    <Button Content="更新を確認" HorizontalAlignment="Left" Margin="690,166,0,0" VerticalAlignment="Top" Width="90" Command="{Binding CheckUpdateCommand}"/>
+                </Grid>
+            </Expander.Content>
+        </Expander>
+    </Grid>
+</Window>

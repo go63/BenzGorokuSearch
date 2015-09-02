@@ -1,0 +1,40 @@
+﻿<Application x:Class="BenzGorokuSearch.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <Style x:Key="aaaaa" TargetType="TreeViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeViewItem">
+                        <RichTextBox AutoWordSelection="False" IsDocumentEnabled="True" IsReadOnly="True" IsReadOnlyCaretVisible="False" FontFamily="MS PGothic" FontSize="12pt" TextOptions.TextFormattingMode="Display" Background="Transparent" BorderThickness="0" Width="{Binding ActualWidth,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VirtualizingStackPanel},Mode=OneWay}">
+                            <FlowDocument>
+                                <Paragraph Margin="0,12pt,0,0"/>
+                                <Paragraph Margin="0" TextOptions.TextRenderingMode="Aliased">
+                                    <Hyperlink Foreground="Black" TextDecorations="{x:Null}" NavigateUri="{Binding ResNumberLink,Mode=OneWay}">
+                                        <Run Text="{Binding ResNumberString,Mode=OneWay}"/>
+                                    </Hyperlink>
+                                    <Run Text="："/>
+                                    <Run Text="{Binding Name,Mode=OneWay}" Foreground="#FF228811" FontWeight="Bold"/>
+                                    <Run Text="{Binding Date,Mode=OneWay,StringFormat=：yyyy/MM/dd HH:mm:ss}"/>
+                                    <Hyperlink Foreground="Black" TextDecorations="{x:Null}" NavigateUri="{Binding IDLink,Mode=OneWay}">
+                                        <Run Text="{Binding ID,Mode=OneWay,StringFormat=ID:{0}}"/>
+                                    </Hyperlink>
+                                    <Hyperlink Foreground="Black" TextDecorations="{x:Null}" NavigateUri=" ">
+                                        <InlineUIContainer BaselineAlignment="Center">
+                                            <Border BorderBrush="#CCC" Background="#CCC" CornerRadius="3" BorderThickness="1">
+                                                <TextBlock Text="{Binding Tag,Mode=OneWay}" Padding="3"/>
+                                            </Border>
+                                        </InlineUIContainer>
+                                    </Hyperlink>
+                                </Paragraph>
+                                <Paragraph Margin="30pt,0,0,0" TextOptions.TextRenderingMode="Aliased">
+                                    <Run Text="{Binding Text,Mode=OneWay}"/>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>

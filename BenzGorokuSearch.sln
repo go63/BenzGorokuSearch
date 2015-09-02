@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenzGorokuSearch", "BenzGorokuSearch\BenzGorokuSearch.csproj", "{2BBD59D4-8B84-48DB-B096-B05BD81CA19A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GorokuEdit", "GorokuEdit\GorokuEdit.csproj", "{5901EA08-872C-4A3C-B18B-9A52DABD7B3E}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GorokuCurator", "GorokuCurator\GorokuCurator.fsproj", "{ED10C6E4-A249-4D86-8524-B915B3708472}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BBD59D4-8B84-48DB-B096-B05BD81CA19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BBD59D4-8B84-48DB-B096-B05BD81CA19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BBD59D4-8B84-48DB-B096-B05BD81CA19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BBD59D4-8B84-48DB-B096-B05BD81CA19A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5901EA08-872C-4A3C-B18B-9A52DABD7B3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5901EA08-872C-4A3C-B18B-9A52DABD7B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5901EA08-872C-4A3C-B18B-9A52DABD7B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5901EA08-872C-4A3C-B18B-9A52DABD7B3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED10C6E4-A249-4D86-8524-B915B3708472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED10C6E4-A249-4D86-8524-B915B3708472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED10C6E4-A249-4D86-8524-B915B3708472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED10C6E4-A249-4D86-8524-B915B3708472}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
